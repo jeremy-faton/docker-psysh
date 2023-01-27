@@ -6,7 +6,7 @@ RUN composer require psy/psysh
 
 RUN wget 'psysh.org/manual/en/php_manual.sqlite'
 
-FROM php:cli
+FROM php:cli-alpine
 
 WORKDIR /app
 
