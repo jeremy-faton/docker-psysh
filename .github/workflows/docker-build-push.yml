@@ -29,5 +29,5 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           push: true
-          tags: jfaton/psysh:latest
+          tags: jeremyfaton/psysh:latest
           platforms: linux/amd64, linux/arm/v6, linux/386
