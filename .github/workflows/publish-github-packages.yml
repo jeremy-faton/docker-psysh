@@ -5,6 +5,8 @@ on:
     - cron: '15 21 * * *'
   push:
     branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
 
 env:
   REGISTRY: ghcr.io
