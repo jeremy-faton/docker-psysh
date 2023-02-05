@@ -10,7 +10,7 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: jfaton/psysh
+  IMAGE_NAME: jeremy-faton/psysh
 
 
 jobs:
