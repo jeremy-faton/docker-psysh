@@ -2,7 +2,9 @@ FROM composer as builder
 
 WORKDIR /app
 
-RUN composer require psy/psysh
+RUN \
+  composer require psy/psysh \
+  && composer audit
 
 RUN wget 'psysh.org/manual/en/php_manual.sqlite'
 
