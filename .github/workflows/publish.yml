@@ -46,7 +46,7 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           push: ${{ github.event_name != 'pull_request' }}
-          tags: jeremy-faton/psysh:latest
+          tags: ${{ steps.meta.outputs.tags }}
           platforms: linux/amd64, linux/arm/v6, linux/386
 
   docker-hub:
