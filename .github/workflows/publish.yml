@@ -1,8 +1,6 @@
 name: Publish to Docker Hub & Github Packages
 
 on:
-  schedule:
-    - cron: "15 21 * * *"
   push:
     branches: ["master"]
   pull_request:
