@@ -1,0 +1,7 @@
+{
+  "output": "psysh",
+  "compactors": [
+    "KevinGH\\Box\\Compactor\\Php",
+    "KevinGH\\Box\\Compactor\\PhpScoper"
+  ]
+}

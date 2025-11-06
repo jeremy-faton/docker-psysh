@@ -1,21 +1,33 @@
-FROM composer AS builder
+ARG PHP_VERSION
+
+FROM php:${PHP_VERSION}-cli-alpine AS installer
 
 WORKDIR /app
 
 RUN \
-  composer require psy/psysh \
-  && composer audit
+  php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
+  && php -r "if (hash_file('sha384', 'composer-setup.php') === 'c8b085408188070d5f52bcfe4ecfbee5f727afa458b2573b8eaaf77b3419b0bf2768dc67c86944da1544f06fa544fd47') { echo 'Installer verified'.PHP_EOL; } else { echo 'Installer corrupt'.PHP_EOL; unlink('composer-setup.php'); exit(1); }" \
+  && php composer-setup.php \
+  && php -r "unlink('composer-setup.php');"
 
-RUN wget 'psysh.org/manual/en/php_manual.sqlite'
+COPY . /app/
 
-FROM php:cli-alpine
+RUN \
+  php composer.phar install --no-dev --prefer-dist \
+  && php composer.phar audit
+
+FROM boxproject/box AS builder
 
 WORKDIR /app
 
-COPY --from=builder /app/vendor /app/vendor
+COPY --from=installer /app/ /app/
 
-RUN mkdir /usr/local/share/psysh
+RUN /box.phar compile
 
-COPY --from=builder /app/php_manual.sqlite /usr/local/share/psysh/php_manual.sqlite
+FROM php:${PHP_VERSION}-cli-alpine
 
-ENTRYPOINT [ "/app/vendor/bin/psysh" ]
+COPY --from=builder /app/psysh /usr/local/bin/psysh
+
+RUN psysh --update-manual
+
+ENTRYPOINT [ "psysh" ]
