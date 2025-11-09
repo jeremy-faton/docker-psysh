@@ -1,21 +1,28 @@
-FROM composer AS builder
+ARG PHP_VERSION=8.4
+
+FROM php:${PHP_VERSION}-cli-alpine AS builder
 
 WORKDIR /app
+
+COPY . /app/
 
 RUN \
-  composer require psy/psysh \
-  && composer audit
+  chmod +x ./install-phive.sh \
+  && ./install-phive.sh
 
-RUN wget 'psysh.org/manual/en/php_manual.sqlite'
+RUN \
+  chmod +x ./install-tools.sh \
+  && ./install-tools.sh
 
-FROM php:cli-alpine
+RUN \
+  composer install --no-dev --prefer-dist \
+  && composer audit \
+  && box compile
 
-WORKDIR /app
+FROM php:${PHP_VERSION}-cli-alpine
 
-COPY --from=builder /app/vendor /app/vendor
+COPY --from=builder /app/psysh /usr/local/bin/psysh
 
-RUN mkdir /usr/local/share/psysh
+RUN psysh --update-manual
 
-COPY --from=builder /app/php_manual.sqlite /usr/local/share/psysh/php_manual.sqlite
-
-ENTRYPOINT [ "/app/vendor/bin/psysh" ]
+ENTRYPOINT [ "psysh" ]

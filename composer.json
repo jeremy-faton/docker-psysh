@@ -1,0 +1,13 @@
+{
+  "name": "jeremyfaton/docker-psysh",
+  "description": "The composer file used to build the phar and the docker image.",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Jeremy Faton"
+    }
+  ],
+  "require": {
+    "psy/psysh": "*"
+  }
+}
