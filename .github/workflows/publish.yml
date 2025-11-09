@@ -40,3 +40,12 @@ jobs:
                   build-args: PHP_VERSION=${{ matrix.version }}
                   tags: jeremyfaton/psysh:${{ matrix.version }}
                   platforms: linux/amd64, linux/arm64
+            
+            - name: Build and push latest
+              uses: docker/build-push-action@v3
+              if: ${{ matrix.version }} == '8.4'
+              with:
+                  push: ${{ github.event_name != 'pull_request' }}
+                  build-args: PHP_VERSION=${{ matrix.version }}
+                  tags: jeremyfaton/psysh:latest
+                  platforms: linux/amd64, linux/arm64
