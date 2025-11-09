@@ -39,4 +39,4 @@ jobs:
                   push: ${{ github.event_name != 'pull_request' }}
                   build-args: PHP_VERSION=${{ matrix.version }}
                   tags: jeremyfaton/psysh:${{ matrix.version }}
-                  platforms: linux/amd64, linux/arm/v6, linux/386
+                  platforms: linux/amd64, linux/arm64
