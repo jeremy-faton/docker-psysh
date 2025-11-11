@@ -16,7 +16,7 @@ jobs:
         runs-on: ubuntu-latest
         strategy:
             matrix:
-                version: ['8.2', '8.3', '8.4']
+                version: ['8.2', '8.3', '8.4', 'latest']
         steps:
             - name: Checkout repository
               uses: actions/checkout@v3
@@ -37,15 +37,7 @@ jobs:
               uses: docker/build-push-action@v3
               with:
                   push: ${{ github.event_name != 'pull_request' }}
-                  build-args: PHP_VERSION=${{ matrix.version }}
+                  build-args: PHP_VERSION=${{ matrix.version == 'latest' && '8.4' || matrix.version }}
                   tags: jeremyfaton/psysh:${{ matrix.version }}
                   platforms: linux/amd64, linux/arm64/v8, linux/arm/v7, linux/386
             
-            - name: Build and push latest
-              uses: docker/build-push-action@v3
-              if: ${{ matrix.version }} == '8.4'
-              with:
-                  push: ${{ github.event_name != 'pull_request' }}
-                  build-args: PHP_VERSION=${{ matrix.version }}
-                  tags: jeremyfaton/psysh:latest
-                  platforms: linux/amd64, linux/arm64/v8, linux/arm/v7, linux/386
